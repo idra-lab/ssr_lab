@@ -19,7 +19,7 @@ format:
 
 
 ## Divisione in gruppi
-- Dividetevi in 8 gruppi (possibilmente di grandezza simile)
+- Dividetevi in 7-8 gruppi (possibilmente di grandezza simile)
 - Ogni gruppo lavorerà sempre con la stessa LIMO e la stessa postazione
   
 
@@ -55,6 +55,26 @@ Per la prima lezione useremo solo la connessione SSH, dalla seconda lavoreremo i
 ![](images/lezione1/net_setups.png){width=80%}
 
 
+
+## Recupero Indirizzi IP LIMO
+Per poter collegarvi alla limo avrete bisogno di conoscere l'IP della LIMO
+
+***Attenzione: gli indirizzi ip cambiano di continuo, quindi dovete annotarvelo nuovamente ad ogni utilizzo!***
+
+*Gli IP di unitn-x sono di solito del tipo `10.196.x.y` 
+
+:::: {.columns}
+
+::: {.column width="50%"}
+![](images/lezione1/ip_limo.png){width=100%}
+
+Per le LIMO basta aprire un terminale per poter vedere l'indirizzo IP.
+:::
+
+::::
+
+
+<!-- 
 ## Recupero Indirizzi IP LIMO e PC
 Per poter collegarvi alla limo avrete bisogno di conoscere i seguenti ip:
 
@@ -79,7 +99,7 @@ Per poter collegarvi alla limo avrete bisogno di conoscere i seguenti ip:
 **Figura 2:** Per il vostro pc, usate il comando `ip a` e cercate la vostra scheda wi-fi, di solito `wlan0`, `wlp2s0` o `wlo1`. In alternativa potete usare il comando "`hostname -I`".
 :::
 
-::::
+:::: -->
 
 ---
 

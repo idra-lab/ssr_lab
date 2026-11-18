@@ -27,7 +27,7 @@ Al termine di questa lezione sarai in grado di:
 - 📡 **ROS Topics** — Comprendere la comunicazione tra nodi.
 - 🔄 **ROS Services** — Utilizzare il modello richiesta/risposta.
 - 🔌 **Interfacciamento hardware** — Usare ROS 2 per leggere e comandare sensori e attuatori.
-- 🤖 **Controllo del robot** — Muovere e controllare una **AgileX LIMO** tramite ROS 2.
+- 🤖 **Controllo del robot** — Controllare una **AgileX LIMO** tramite ROS 2.
 :::
 
 ## 🐢 Robot Operating System 2 (ROS 2)
@@ -87,21 +87,21 @@ flowchart LR
 
 Comandi:
 ```{.bash}
-ros2 node list                 # Elenca i nodi attivi: /planner_node, /limo_base
+ros2 node list              # Elenca i nodi attivi: /planner_node, /limo_base
 ros2 node info /planner     # Mostra le interfacce del nodo: publisher of /cmd_vel, subscriber of /odom
 ```
 
 ## 📡 ROS 2 Topics: Publisher e Subscriber
 
 - Un **topic** è un canale con un nome, per esempio `/temperature`.
-- Il **publisher** pubblica messaggi; i **subscriber** ricevono i nuovi messaggi.
-- Più **nodi** possono pubblicare o ricevere sullo stesso topic, senza conoscersi direttamente.
+- Un nodo che contiene un **publisher** pubblica messaggi su un topic, mentre un nodo che contiene un **subscriber** riceve i messaggi pubblicati su quel topic.
+- Un topic può essere letto da più nodi.
 - Ideale per **flussi di dati**: sensori, immagini, posizione e velocità.
 
 ```{mermaid}
 flowchart LR
-    sensor["temperature_node"] -->|"Misure del sensore<br>topic '/temperature'"| monitor["monitoring_node"]
-    sensor -->|"Misure del sensore<br>topic '/temperature'"| recorder["recorder_node"]
+    sensor["/temperature_node"] -->|"Misure del sensore<br>topic '/temperature'"| monitor["/monitoring_node"]
+    sensor -->|"Misure del sensore<br>topic '/temperature'"| recorder["/recorder_node"]
 ```
 
 ## 📡 Topics: messaggi e comandi
@@ -141,7 +141,23 @@ ros2 topic delay /camera_image          # Stima il ritardo
 | `/imu` | `sensor_msgs/msg/Imu` | Orientamento, velocità angolare e accelerazione |
 | `/cmd_vel` | `geometry_msgs/msg/Twist` | Velocità lineare e angolare |
 
+Esempio creazione nodo con publisher (Python)
+```python
+import rclpy
+from rclpy.node import Node
+from std_msgs.msg import String
+
+# Crea la classe ereditando da ROS 2 node
+class My_SSR_Node(Node):
+    def __init__(self):
+        super().__init__('my_ssr_node')
+
+        # Istanzia il publisher
+        self.publisher_ = self.create_publisher(String, '/chatter', 10)
+```
+
 :::
+
 
 
 ## 📨 Esempi di messaggi ROS 2
@@ -231,7 +247,6 @@ ros2 service find std_srvs/srv/Trigger  # Cerca per tipo (/start_scan, /stop_sca
 | `/reset` | `std_srvs/srv/Empty` | Vuota → Vuota |
 | `/enable_motor` | `std_srvs/srv/SetBool` | `data: true` → `success`, `message` |
 | `/trigger_capture` | `std_srvs/srv/Trigger` | Vuota → `success`, `message` |
-| `/spawn` | `turtlesim/srv/Spawn` | Posizione e nome → Nome della tartaruga |
 
 :::
 
@@ -243,7 +258,6 @@ I tipi di servizio si riconoscono dal percorso **`pacchetto/srv/Tipo`**.
 
 - [std_srvs](https://docs.ros.org/en/jazzy/p/std_srvs/): operazioni comuni (`Empty`, `SetBool`, `Trigger`).
 - [example_interfaces](https://docs.ros.org/en/jazzy/p/example_interfaces/): tipi didattici, come `AddTwoInts`.
-- [turtlesim](https://docs.ros.org/en/jazzy/p/turtlesim/): servizi del simulatore, come `Spawn` e `TeleportAbsolute`.
 - È possibile definire **service personalizzati**, specificando i campi della richiesta e della risposta in un file `.srv`.
 
 ## 📨 Leggere la struttura di un service
@@ -283,6 +297,9 @@ ros2 service call /add_two_ints example_interfaces/srv/AddTwoInts "{a: 2, b: 3}"
 ```
 
 Il server risponde con **`sum: 5`**. Richiede il pacchetto `demo_nodes_cpp` installato.
+```
+sudo apt-get install ros-jazzy-demo-nodes-cpp
+```
 
 ## ⚖️ Topic o Service?
 
@@ -293,7 +310,7 @@ Il server risponde con **`sum: 5`**. Richiede il pacchetto `demo_nodes_cpp` inst
 | Esempio | Misure del laser su `/scan` | Avvio scan su `/start_scan` |
 | Risposta al mittente | Non prevista dal modello | Prevista per ogni richiesta |
 
-Per attività lunghe con avanzamento e annullamento, come raggiungere una destinazione, si usano le **ROS action**. Le action sono una soluzione ibrida tra ROS topic e servicem ,ma non coperte in questo corso.
+Per attività lunghe con avanzamento e annullamento, come raggiungere una destinazione, si usano le **ROS action**. Le action sono una soluzione ibrida tra ROS topic e service, ma non coperte in questo corso.
 
 ::: {.notes}
 Fonti: [Topic](https://docs.ros.org/en/humble/Tutorials/Beginner-CLI-Tools/Understanding-ROS2-Topics/Understanding-ROS2-Topics.html), [Service](https://docs.ros.org/en/humble/Tutorials/Beginner-CLI-Tools/Understanding-ROS2-Services/Understanding-ROS2-Services.html), [Confronto delle interfacce](https://github.com/ros2/ros2_documentation/blob/rolling/source/ROS-Framework/interfaces/Topics-Services-Actions.rst).
@@ -313,6 +330,8 @@ Fonti: [Topic](https://docs.ros.org/en/humble/Tutorials/Beginner-CLI-Tools/Under
 - Singola posizione target che il robot deve raggiungere? -> Service
 - Input continuo di controllo che il robot deve tracciare? -> Topic (es: /cmd_vel)
 - Stato del robot? (Operativo/Inattivo) -> Topic o Service
+
+### Altre domande?
 
 ## 🤖 Pronti per controllare la vostra LIMO!
 
