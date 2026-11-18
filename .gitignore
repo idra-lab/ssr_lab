@@ -1,0 +1,21 @@
+# Output e cache generati da Quarto
+*.html
+*_files/
+.quarto/
+_site/
+_freeze/
+notebooks/
+ros2_ws/
+# Cache dei notebook e di Python
+.ipynb_checkpoints/
+__pycache__/
+*.py[cod]
+.venv/
+
+# File locali di editor e sistema operativo
+.vscode/
+.idea/
+.DS_Store
+*~
+todo
+slides/lezione2.qmd

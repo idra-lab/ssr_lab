@@ -1,0 +1,11 @@
+/* Centra tutti i diagrammi Mermaid, compresi quelli aggiunti in futuro. */
+.reveal .mermaid {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.reveal .mermaid svg {
+  display: block;
+  margin-inline: auto;
+}
