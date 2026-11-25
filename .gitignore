@@ -19,3 +19,4 @@ __pycache__/
 *~
 todo
 slides/lezione2.qmd
+**/**.pdf
